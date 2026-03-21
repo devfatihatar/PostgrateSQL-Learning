@@ -3,8 +3,11 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
+
+//Route imports
 const authRoutes = require("./routes/authRoutes")
 const authMiddleware = require("./middleware/authMiddleware")
+const postRoutes = require("./routes/postRoutes")
 
 //Initialize Express app and Prisma client
 const app = express();
@@ -14,6 +17,8 @@ const prisma  = new PrismaClient();
 app.use(cors());
 app.use(express.json());
 app.use("/auth", authRoutes)
+app.use("/posts", postRoutes)
+
 //Start the server
 app.get("/", (req, res) => {
     res.send("AtarCMS API is running...");
