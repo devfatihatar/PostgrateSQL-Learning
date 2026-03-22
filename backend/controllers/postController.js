@@ -62,3 +62,84 @@ exports.getPosts = async (req, res) => {
         res.status(500).json({error: "Internal server error"})
     }
 }
+
+exports.deletePost = async (req, res) =>{
+    try {
+
+        const {id} = req.params
+
+        const post = await prisma.post.findUnique({
+            where: {
+                id: parseInt(id)
+            }
+        })
+        if(!post){
+            return res.status(404).json({error: "Post not found"})
+        }
+
+        if(post.authorId !== req.user.userId){
+            return res.status(403).json({error: "You are not authorized to delete this post"})
+        }
+
+        await prisma.post.delete({
+            where: {
+                id: parseInt(id)
+            }
+        })
+
+        res.json({message: "Post deleted successfully"})
+
+    }catch (error) {
+        console.error("Error deleting post:", error)
+        res.status(500).json({error: "Internal server error"})
+    }
+}
+
+exports.updatePost = async (req, res) => {
+    try {
+        const {
+            id,
+            authorId
+        } = req.params
+        const postId = parseInt(id)
+        const userId = parseInt(authorId)
+        const {title, content} = req.body
+
+        if (!req.user?.userId) {
+            return res.status(401).json({ error: "Unauthorized" })
+        }
+
+        if (Number.isNaN(postId)) {
+            return res.status(400).json({ error: "Invalid post id" })
+        }
+
+        const post = await prisma.post.findUnique({
+            where: {
+                id: postId
+            }
+        })
+
+        if(!post){
+            return res.status(404).json({error: "Post not found"})
+        }
+
+        if(post.authorId !== req.user.userId){
+            return res.status(403).json({error: "You are not authorized to update this post"})
+        }
+
+        const updatedPost = await prisma.post.update({
+            where: {
+                id: postId
+            },
+            data: {
+                title,
+                content
+            }
+        })
+
+        res.json(updatedPost)
+    } catch (error) {
+        console.error("Error updating post:", error)
+        res.status(500).json({ error: "Internal server error" })
+    }
+}
