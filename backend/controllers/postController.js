@@ -45,23 +45,74 @@ exports.getPostById = async (req, res) => {
   }
 }
 
-// Tüm postları yazar adıyla birlikte listeler.
 exports.getPosts = async (req, res) => {
   try {
-    const posts = await prisma.post.findMany({
-      select: {
-        id: true,
-        title: true,
-        content: true,
-        author: {
-          select: {
-            name: true
+    const {
+      page: rawPage = 1,
+      limit: rawLimit = 10,
+      search,
+      authorId: rawAuthorId,
+      sortBy = "createdAt",
+      order = "desc"
+    } = req.query
+
+    // Query parametreleri URL'den geldigi icin string olabilir.
+    const page = Number(rawPage)
+    const limit = Number(rawLimit)
+    const authorId = rawAuthorId ? Number(rawAuthorId) : undefined
+
+    const where = {}
+
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: "insensitive" } },
+        { content: { contains: search, mode: "insensitive" } }
+      ]
+    }
+
+    if (authorId) {
+      where.authorId = authorId
+    }
+
+    const skip = (page - 1) * limit
+
+    const [posts, total] = await Promise.all([
+      prisma.post.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: {
+          [sortBy]: order
+        },
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          createdAt: true,
+          author: {
+            select: {
+              id: true,
+              name: true
+            }
           }
         }
+      }),
+      prisma.post.count({ where })
+    ])
+
+    const totalPages = Math.ceil(total / limit)
+
+    res.json({
+      data: posts,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1
       }
     })
-
-    res.json(posts)
   } catch (error) {
     console.error("Error fetching posts:", error)
     res.status(500).json({ error: "Internal server error" })

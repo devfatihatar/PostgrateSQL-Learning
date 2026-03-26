@@ -33,8 +33,46 @@ const updatePostSchema = {
   body: createPostSchema.body
 }
 
+const getPostsQuerySchema = {
+  query: {
+    page: {
+      type: "number",
+      integer: true,
+      min: 1
+    },
+    limit: {
+      type: "number",
+      integer: true,
+      min: 1,
+      max: 50
+    },
+    authorId: {
+      type: "number",
+      integer: true,
+      positive: true
+    },
+    search: {
+      type: "string",
+      trim: true,
+      minLength: 1,
+      maxLength: 100
+    },
+    sortBy: {
+      type: "string",
+      trim: true,
+      oneOf: ["createdAt", "title"]
+    },
+    order: {
+      type: "string",
+      trim: true,
+      oneOf: ["asc", "desc"]
+    }
+  }
+}
+
 module.exports = {
   postIdSchema,
   createPostSchema,
-  updatePostSchema
+  updatePostSchema,
+  getPostsQuerySchema
 }

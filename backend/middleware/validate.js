@@ -73,6 +73,14 @@ module.exports = (schema) => {
               message: config.patternMessage || `${field} format is invalid`,
             });
           }
+
+          if (config.oneOf && !config.oneOf.includes(value)) {
+            errors.push({
+              field,
+              source,
+              message: `${field} must be one of: ${config.oneOf.join(", ")}`,
+            });
+          }
         }
 
         if (config.type === "number") {
@@ -100,6 +108,22 @@ module.exports = (schema) => {
               field,
               source,
               message: `${field} must be greater than 0`,
+            });
+          }
+
+          if (config.min !== undefined && numericValue < config.min) {
+            errors.push({
+              field,
+              source,
+              message: `${field} must be at least ${config.min}`,
+            });
+          }
+
+          if (config.max !== undefined && numericValue > config.max) {
+            errors.push({
+              field,
+              source,
+              message: `${field} must be at most ${config.max}`,
             });
           }
 

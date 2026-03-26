@@ -14,11 +14,12 @@ const validate = require("../middleware/validate")
 const {
     postIdSchema,
     createPostSchema,
-    updatePostSchema
+    updatePostSchema,
+    getPostsQuerySchema
 } = require("../validations/postValidation")
 
 router.post('/', authMiddleware, validate(createPostSchema), createPost)
-router.get('/', getPosts)
+router.get('/', validate(getPostsQuerySchema), getPosts)
 router.get('/:id', validate(postIdSchema), getPostById)
 router.put('/:id', authMiddleware, validate(updatePostSchema), updatePost)
 router.delete('/:id', authMiddleware, validate(postIdSchema), deletePost)
