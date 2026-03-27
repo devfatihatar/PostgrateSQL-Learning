@@ -1,7 +1,11 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function getAuthToken() {
-  return localStorage.getItem("token");
+  return sessionStorage.getItem("token");
+}
+
+function clearAuthToken() {
+  sessionStorage.removeItem("token");
 }
 
 function getCurrentUserId() {
@@ -88,4 +92,4 @@ export function deletePost(postId) {
     method: "DELETE",
   });
 }
-export { API_BASE_URL, getAuthToken, getCurrentUserId };
+export { API_BASE_URL, getAuthToken, getCurrentUserId, clearAuthToken };

@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import ProtectedRoute from "../components/ProtectedRoute";
 import CreatePostPage from "../pages/CreatePostPage";
 import DeletePostPage from "../pages/DeletePostPage";
 import LoginPage from "../pages/LoginPage";
@@ -11,12 +12,40 @@ export default function AppRouter() {
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/posts" element={<PostsPage />} />
-      <Route path="/posts/new-post" element={<CreatePostPage />} />
-      <Route path="/posts/update-post" element={<UpdatePostPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route
+        path="/posts"
+        element={
+          <ProtectedRoute>
+            <PostsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/posts/new-post"
+        element={
+          <ProtectedRoute>
+            <CreatePostPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/posts/update-post"
+        element={
+          <ProtectedRoute>
+            <UpdatePostPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/posts/delete-post"
+        element={
+          <ProtectedRoute>
+            <DeletePostPage />
+          </ProtectedRoute>
+        }
+      />
       <Route path="*" element={<Navigate to="/login" replace />} />
-      <Route path="/posts/delete-post" element={<DeletePostPage />} />
     </Routes>
   );
 }

@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getPosts } from "../services/api";
+import { Link, useNavigate } from "react-router-dom";
+import { clearAuthToken, getPosts } from "../services/api";
 
 export default function PostsPage() {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [meta, setMeta] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [errorDetails, setErrorDetails] = useState([]);
+
+  function handleLogout() {
+    clearAuthToken();
+    navigate("/login", { replace: true });
+  }
 
   useEffect(() => {
     async function loadPosts() {
@@ -41,9 +47,9 @@ export default function PostsPage() {
         </div>
 
         <div style={styles.actions}>
-          <Link style={styles.secondaryButton} to="/login">
-            Login sayfasina don
-          </Link>
+          <button style={styles.secondaryButton} type="button" onClick={handleLogout}>
+            Cikis yap
+          </button>
           <Link style={styles.linkButton} to="/posts/new-post">
             Yeni post
           </Link>

@@ -32,8 +32,8 @@ export default function LoginPage() {
       const response = await login(formData);
 
       if (response.token) {
-        // Token'i tarayicida sakliyoruz ki sonraki isteklerde kullanabilelim.
-        localStorage.setItem("token", response.token);
+        // Sekme kapaninca oturum bitsin diye sessionStorage kullaniyoruz.
+        sessionStorage.setItem("token", response.token);
         setSuccessMessage("Login basarili. Post sayfasina yonlendiriliyorsun.");
 
         // Kullanici kisa mesaji gorebilsin diye cok kisa bir bekleme koyuyoruz.
