@@ -44,8 +44,11 @@ export default function PostsPage() {
           <Link style={styles.secondaryButton} to="/login">
             Login sayfasina don
           </Link>
-          <Link style={styles.linkButton} to="/posts/new">
+          <Link style={styles.linkButton} to="/posts/new-post">
             Yeni post
+          </Link>
+          <Link style={styles.linkButton} to="/posts/delete-post">
+            Postu sil
           </Link>
         </div>
       </section>

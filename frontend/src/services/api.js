@@ -1,7 +1,24 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 function getAuthToken() {
   return localStorage.getItem("token");
+}
+
+function getCurrentUserId() {
+  const token = getAuthToken();
+
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const [, payload] = token.split(".");
+    const decodedPayload = JSON.parse(atob(payload));
+
+    return decodedPayload.userId || null;
+  } catch {
+    return null;
+  }
 }
 
 // Tek bir yerden request atmak, endpoint'leri yonetmeyi kolaylastirir.
@@ -42,6 +59,15 @@ export function login(credentials) {
   });
 }
 
+// Register icin email ve sifreyi backend'e yollar.
+
+export function register(credentials) {
+  return request("/auth/register", {
+    method: "POST",
+    body: JSON.stringify(credentials)
+  });
+}
+
 // Auth gereken post olusturma istegi.
 export function createPost(postData) {
   return request("/posts", {
@@ -50,4 +76,9 @@ export function createPost(postData) {
   });
 }
 
-export { API_BASE_URL, getAuthToken };
+export function deletePost(postId) {
+  return request(`/posts/${postId}`, {
+    method: "DELETE",
+  });
+}
+export { API_BASE_URL, getAuthToken, getCurrentUserId };

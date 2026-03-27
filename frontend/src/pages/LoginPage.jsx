@@ -53,10 +53,6 @@ export default function LoginPage() {
       <section style={styles.card}>
         <p style={styles.eyebrow}>AtarCMS Admin</p>
         <h1 style={styles.title}>Giris Yap</h1>
-        <p style={styles.text}>
-          Once formu backend login endpoint'ine bagliyoruz. Token saklama ve yonlendirme bir sonraki adim olacak.
-        </p>
-
         <form style={styles.form} onSubmit={handleSubmit}>
           <input
             style={styles.input}
@@ -82,8 +78,8 @@ export default function LoginPage() {
         {error && <p style={styles.error}>{error}</p>}
         {successMessage && <p style={styles.success}>{successMessage}</p>}
 
-        <Link style={styles.link} to="/posts">
-          Post listesine gec
+        <Link style={styles.link} to="/register">
+          Kayıt ol
         </Link>
       </section>
     </main>
