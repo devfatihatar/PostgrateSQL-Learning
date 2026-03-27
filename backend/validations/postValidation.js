@@ -24,6 +24,11 @@ const createPostSchema = {
       trim: true,
       minLength: 10,
       maxLength: 5000
+    },
+    imageUrl: {
+      type: "string",
+      trim: true,
+      maxLength: 500
     }
   }
 }

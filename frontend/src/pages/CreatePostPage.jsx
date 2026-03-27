@@ -7,6 +7,7 @@ export default function CreatePostPage() {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
+    imageUrl: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -76,6 +77,15 @@ export default function CreatePostPage() {
             value={formData.content}
             onChange={handleChange}
             rows={8}
+          />
+
+          <input
+            style={styles.input}
+            type="text"
+            name="imageUrl"
+            placeholder="Resim URL"
+            value={formData.imageUrl}
+            onChange={handleChange}
           />
 
           <button style={styles.button} type="submit" disabled={isSubmitting}>

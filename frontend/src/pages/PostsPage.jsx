@@ -47,6 +47,9 @@ export default function PostsPage() {
           <Link style={styles.linkButton} to="/posts/new-post">
             Yeni post
           </Link>
+          <Link style={styles.linkButton} to="/posts/update-post">
+            Postu duzenle
+          </Link>
           <Link style={styles.linkButton} to="/posts/delete-post">
             Postu sil
           </Link>
@@ -79,6 +82,13 @@ export default function PostsPage() {
           !error &&
           posts.map((post) => (
           <article key={post.id} style={styles.card}>
+            {post.imageUrl && (
+              <img
+                src={post.imageUrl}
+                alt={post.title}
+                style={styles.image}
+              />
+            )}
             <h2 style={styles.cardTitle}>{post.title}</h2>
             <p style={styles.cardText}>Yazar: {post.author?.name || "Bilinmiyor"}</p>
             <p style={styles.cardText}>{post.content}</p>
@@ -175,6 +185,13 @@ const styles = {
     backgroundColor: "rgba(255, 252, 247, 0.9)",
     border: "1px solid rgba(95, 68, 40, 0.12)",
     boxShadow: "0 12px 34px rgba(64, 43, 24, 0.08)",
+  },
+  image: {
+    width: "100%",
+    maxHeight: "260px",
+    objectFit: "cover",
+    borderRadius: "16px",
+    marginBottom: "14px",
   },
   cardTitle: {
     margin: "0 0 8px",

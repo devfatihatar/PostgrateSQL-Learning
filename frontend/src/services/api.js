@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function getAuthToken() {
   return localStorage.getItem("token");
@@ -72,6 +72,13 @@ export function register(credentials) {
 export function createPost(postData) {
   return request("/posts", {
     method: "POST",
+    body: JSON.stringify(postData),
+  });
+}
+
+export function updatePost(postId, postData) {
+  return request(`/posts/${postId}`, {
+    method: "PUT",
     body: JSON.stringify(postData),
   });
 }

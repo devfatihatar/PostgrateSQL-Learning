@@ -5,12 +5,13 @@ const prisma = new PrismaClient()
 // Validation'dan geçen body verisiyle yeni post oluşturur.
 exports.createPost = async (req, res) => {
   try {
-    const { title, content } = req.body
+    const { title, content, imageUrl } = req.body
 
     const post = await prisma.post.create({
       data: {
         title,
         content,
+        imageUrl,
         authorId: req.user.userId
       }
     })
@@ -88,6 +89,7 @@ exports.getPosts = async (req, res) => {
           id: true,
           title: true,
           content: true,
+          imageUrl: true,
           createdAt: true,
           author: {
             select: {
@@ -151,7 +153,7 @@ exports.deletePost = async (req, res) => {
 exports.updatePost = async (req, res) => {
   try {
     const { id } = req.params
-    const { title, content } = req.body
+    const { title, content, imageUrl } = req.body
 
     const post = await prisma.post.findUnique({
       where: { id }
@@ -169,7 +171,8 @@ exports.updatePost = async (req, res) => {
       where: { id },
       data: {
         title,
-        content
+        content,
+        imageUrl
       }
     })
 
